@@ -51,7 +51,7 @@ class _EmailScreenState extends State<EmailScreen> {
     FocusScope.of(context).unfocus();
   }
 
-  void _onSubmit() {
+  void _onSubmitTap() {
     if (_email.isEmpty || _isEmailValid() != null) return;
     Navigator.push(
       context,
@@ -96,7 +96,7 @@ class _EmailScreenState extends State<EmailScreen> {
               TextField(
                 controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
-                onEditingComplete: _onSubmit,
+                onEditingComplete: _onSubmitTap,
                 decoration: InputDecoration(
                   hintText: 'Email',
                   errorText: _isEmailValid(),
@@ -115,7 +115,7 @@ class _EmailScreenState extends State<EmailScreen> {
               ),
               Gaps.v16,
               GestureDetector(
-                onTap: _onSubmit,
+                onTap: _onSubmitTap,
                 child: FormButton(disabled: _email.isEmpty || _isEmailValid() != null),
               ),
             ],
