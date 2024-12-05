@@ -70,6 +70,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // NOTE: virtual keyboard에 의해 main 화면이 찌그러지지 않도록 설정.
+      resizeToAvoidBottomInset: false,
       backgroundColor: _selectedIndex == 0 ? Colors.black : Colors.white,
       body: Stack(
         children: [
