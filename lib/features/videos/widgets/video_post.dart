@@ -22,9 +22,9 @@ class VideoPost extends StatefulWidget {
 
 class _VideoPostState extends State<VideoPost> with SingleTickerProviderStateMixin {
   final VideoPlayerController _videoPlayerController = VideoPlayerController.asset("assets/videos/video1.mp4");
+  late final AnimationController _animationController;
 
   final Duration _duration = const Duration(milliseconds: 200);
-  late final AnimationController _animationController;
   bool _isPaused = false;
 
   void _onVideoChange() {
@@ -66,9 +66,16 @@ class _VideoPostState extends State<VideoPost> with SingleTickerProviderStateMix
     if (info.visibleFraction == 1 && !_isPaused && !_videoPlayerController.value.isPlaying) {
       _videoPlayerController.play();
     }
+    if (_videoPlayerController.value.isPlaying && info.visibleFraction == 0) {
+      // NOTE: Bottom navigation 화면 이동 후 돌아왔을 때, 영상을 다시 재생하기 위해 2번 토글.
+      // 1회 토글 시 일시정지로 유지
+      _onTogglePause();
+      _onTogglePause();
+    }
   }
 
   void _onTogglePause() {
+    if (!mounted) return;
     if (_videoPlayerController.value.isPlaying) {
       _videoPlayerController.pause();
       _animationController.reverse();
