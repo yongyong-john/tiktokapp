@@ -63,6 +63,8 @@ class _VideoPostState extends State<VideoPost> with SingleTickerProviderStateMix
   }
 
   void _onVisibilityChange(VisibilityInfo info) {
+    // NOTE: Widget이 tree에 있다면 mount는 true를 return.
+    if (!mounted) return;
     if (info.visibleFraction == 1 && !_isPaused && !_videoPlayerController.value.isPlaying) {
       _videoPlayerController.play();
     }
