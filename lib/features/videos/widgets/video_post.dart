@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktokapp/constants/gaps.dart';
@@ -38,6 +39,11 @@ class _VideoPostState extends State<VideoPost> with SingleTickerProviderStateMix
   void _initVideoPlayer() async {
     await _videoPlayerController.initialize();
     await _videoPlayerController.setLooping(true);
+    // NOTE: Browser는 첫 번째 Load에서 소리를 포함한 영상을 재생하지 않도록 됨
+    // 따라서 첫 번째 Load에서 영상을 재생 시 소리를 mute하여 재생할 수 있음
+    if (kIsWeb) {
+      await _videoPlayerController.setVolume(0);
+    }
     _videoPlayerController.addListener(_onVideoChange);
     setState(() {});
   }

@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:tiktokapp/constants/sizes.dart';
 import 'package:tiktokapp/features/authentication/sign_up_screen.dart';
 import 'package:tiktokapp/features/main_navigation/main_navigation_screen.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // NOTE: Statusbar의 orientation 설정
+  await SystemChrome.setPreferredOrientations(
+    [
+      DeviceOrientation.portraitUp,
+    ],
+  );
+
+  // NOTE: Statusbar의 색상 설정
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle.dark,
+  );
+
   runApp(const TikTokApp());
 }
 
@@ -13,6 +28,7 @@ class TikTokApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'TikTok App',
       theme: ThemeData(
         primaryColor: const Color(0xFFE9435A),
