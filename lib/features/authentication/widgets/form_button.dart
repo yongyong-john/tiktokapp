@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tiktokapp/constants/sizes.dart';
+import 'package:tiktokapp/utils.dart';
 
 class FormButton extends StatelessWidget {
   const FormButton({
@@ -25,7 +26,11 @@ class FormButton extends StatelessWidget {
         child: AnimatedDefaultTextStyle(
           duration: const Duration(milliseconds: 500),
           style: TextStyle(
-            color: disabled ? Colors.grey.shade600 : Colors.white,
+            color: disabled
+                ? isDarkMode(context)
+                    ? Colors.grey.shade800
+                    : Colors.grey.shade600
+                : Colors.white,
             fontWeight: FontWeight.w600,
           ),
           child: const Text(

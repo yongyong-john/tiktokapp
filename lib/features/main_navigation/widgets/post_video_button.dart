@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktokapp/constants/sizes.dart';
+import 'package:tiktokapp/utils.dart';
 
 class PostVideoButton extends StatelessWidget {
   const PostVideoButton({
@@ -12,6 +13,7 @@ class PostVideoButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = isDarkMode(context);
     return Stack(
       clipBehavior: Clip.none,
       children: [
@@ -53,13 +55,13 @@ class PostVideoButton extends StatelessWidget {
             horizontal: Sizes.size10,
           ),
           decoration: BoxDecoration(
-            color: inverted ? Colors.black : Colors.white,
+            color: !inverted || isDark ? Colors.white : Colors.black,
             borderRadius: BorderRadius.circular(Sizes.size8),
           ),
           child: Center(
             child: FaIcon(
               FontAwesomeIcons.plus,
-              color: inverted ? Colors.white : Colors.black,
+              color: !inverted || isDark ? Colors.black : Colors.white,
               size: Sizes.size18,
             ),
           ),

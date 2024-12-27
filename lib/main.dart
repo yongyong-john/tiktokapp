@@ -30,11 +30,20 @@ class TikTokApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'TikTok App',
+      themeMode: ThemeMode.system,
       theme: ThemeData(
+        brightness: Brightness.light,
         primaryColor: const Color(0xFFE9435A),
         textSelectionTheme: const TextSelectionThemeData(
           cursorColor: Color(0xFFE9435A),
         ),
+        bottomAppBarTheme: BottomAppBarTheme(
+          color: Colors.grey.shade50,
+        ),
+        // NOTE: 아래 링크의 문서인 The type system에서 폰트 설정을 할 수 있음
+        // https://m2.material.io/design/typography/the-type-system.html#type-scale
+        // GoogleFonts 대신 Typography를 쓰는 것도 방법
+        textTheme: Typography.blackMountainView,
         scaffoldBackgroundColor: Colors.white,
         // NOTE: 버튼을 눌렀을 때, 반짝이는 효과나 눌리는 효과를 제거하기 위한 옵션
         // 만약, 설정이 먹히지 않으면 해당 위젯에서 직접 설정
@@ -51,6 +60,33 @@ class TikTokApp extends StatelessWidget {
             color: Colors.black,
           ),
         ),
+        tabBarTheme: TabBarTheme(
+          labelColor: Colors.black,
+          unselectedLabelColor: Colors.grey.shade500,
+          indicatorColor: Colors.black,
+        ),
+        listTileTheme: const ListTileThemeData(
+          iconColor: Colors.black,
+        ),
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: Colors.black,
+        primaryColor: const Color(0xFFE9435A),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: Color(0xFFE9435A),
+        ),
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.grey.shade900,
+        ),
+        tabBarTheme: const TabBarTheme(
+          labelColor: Colors.white,
+          indicatorColor: Colors.white,
+        ),
+        bottomAppBarTheme: BottomAppBarTheme(
+          color: Colors.grey.shade800,
+        ),
+        textTheme: Typography.whiteMountainView,
       ),
       home: const MainNavigationScreen(),
     );

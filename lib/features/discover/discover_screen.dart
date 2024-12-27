@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktokapp/constants/breakpoints.dart';
 import 'package:tiktokapp/constants/gaps.dart';
 import 'package:tiktokapp/constants/sizes.dart';
+import 'package:tiktokapp/utils.dart';
 
 final tabs = [
   "Top",
@@ -57,8 +58,13 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
               controller: _textEditingController,
               onChanged: _onSearchChanged,
               onSubmitted: _onSearchSubmitted,
+              // NOTE: Cupertino widget의 경우, MaterialApp에서 설정할 수 없으므로 직접 색상 설정.
+              style: TextStyle(
+                color: isDarkMode(context) ? Colors.white : Colors.black,
+              ),
             ),
           ),
+          // NOTE: Moved from TabBar's color settings to ThemeData in MaterialApp.
           bottom: TabBar(
             splashFactory: NoSplash.splashFactory,
             padding: const EdgeInsets.symmetric(
@@ -66,14 +72,13 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             ),
             tabAlignment: TabAlignment.center,
             isScrollable: true,
-            labelColor: Colors.black,
-            unselectedLabelColor: Colors.grey.shade500,
-            indicatorColor: Colors.black,
             indicatorSize: TabBarIndicatorSize.tab,
             labelStyle: const TextStyle(
               fontSize: Sizes.size16,
               fontWeight: FontWeight.w600,
             ),
+            // NOTE: Flutter 버전에 따라 해당 Color를 직접 적용해야 할 수도 있음.
+            // indicatorColor: Theme.of(context).tabBarTheme.indicatorColor,
             tabs: [
               for (var tab in tabs) Tab(text: tab),
             ],
@@ -128,7 +133,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                       // NOTE: 하위 Widget의 TextStyle을 공통으로 적용하는 Widget.
                       DefaultTextStyle(
                         style: TextStyle(
-                          color: Colors.grey.shade600,
+                          color: isDarkMode(context) ? Colors.grey.shade300 : Colors.grey.shade600,
                           fontWeight: FontWeight.w600,
                         ),
                         child: Row(

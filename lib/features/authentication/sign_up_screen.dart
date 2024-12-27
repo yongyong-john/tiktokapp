@@ -5,6 +5,7 @@ import 'package:tiktokapp/constants/sizes.dart';
 import 'package:tiktokapp/features/authentication/login_screen.dart';
 import 'package:tiktokapp/features/authentication/username_screen.dart';
 import 'package:tiktokapp/features/authentication/widgets/auth_button.dart';
+import 'package:tiktokapp/utils.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({super.key});
@@ -37,21 +38,24 @@ class SignUpScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Gaps.v80,
-                  const Text(
+                  Text(
                     'Sign up for TikTok',
-                    style: TextStyle(
-                      fontSize: Sizes.size24,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    // NOTE: Theme을 사용 중 특별한 하나만 수정하고 싶으면 copywith로 일부만 수정 가능.
+                    style: Theme.of(context).textTheme.headlineSmall!, //.copyWith(color: Colors.red),
                   ),
                   Gaps.v20,
-                  const Text(
-                    'Create a profile, follow other accounts, make your own videos, and more.',
-                    style: TextStyle(
-                      fontSize: Sizes.size16,
-                      color: Colors.black45,
+                  Opacity(
+                    opacity: 0.7,
+                    child: Text(
+                      'Create a profile, follow other accounts, make your own videos, and more.',
+                      style: Theme.of(context).textTheme.titleMedium,
+                      // style: TextStyle(
+                      //   fontSize: Sizes.size16,
+                      // NOTE: isDarkMode로 컬러를 변환 할 수 있지만, 회색의 경우 Opacity 설정으로 한 번에 가능
+                      // color: isDarkMode(context) ? Colors.grey.shade300 : Colors.black45,
+                      // ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
                   ),
                   Gaps.v40,
                   // NOTE: Collection if를 1개 이상의 Widget에 적용하기 위해 ...[]으로 감싸 사용
@@ -95,7 +99,8 @@ class SignUpScreen extends StatelessWidget {
             ),
           ),
           bottomNavigationBar: BottomAppBar(
-            color: Colors.grey.shade50,
+            // NOTE: isDarkMode에서 null을 설정하면 MaterialApp의 theme에서 설정한 color 값으로 적용
+            color: isDarkMode(context) ? null : Colors.grey.shade50,
             elevation: 2,
             child: Padding(
               padding: const EdgeInsets.symmetric(

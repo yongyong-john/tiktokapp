@@ -4,6 +4,7 @@ import 'package:tiktokapp/constants/gaps.dart';
 import 'package:tiktokapp/constants/sizes.dart';
 import 'package:tiktokapp/features/onboarding/tutorial_screen.dart';
 import 'package:tiktokapp/features/onboarding/widgets/interest_button.dart';
+import 'package:tiktokapp/utils.dart';
 
 const interests = [
   "Daily Life",
@@ -144,7 +145,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
+        color: isDarkMode(context) ? Colors.black : Colors.white,
         elevation: 2,
         height: 140,
         child: Padding(
