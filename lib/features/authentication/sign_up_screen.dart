@@ -98,13 +98,13 @@ class SignUpScreen extends StatelessWidget {
               ),
             ),
           ),
-          bottomNavigationBar: BottomAppBar(
+          bottomNavigationBar: Container(
             // NOTE: isDarkMode에서 null을 설정하면 MaterialApp의 theme에서 설정한 color 값으로 적용
             color: isDarkMode(context) ? null : Colors.grey.shade50,
-            elevation: 2,
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: Sizes.size12,
+              padding: const EdgeInsets.only(
+                top: Sizes.size32,
+                bottom: Sizes.size48,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

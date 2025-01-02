@@ -101,7 +101,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
           duration: const Duration(milliseconds: 300),
           child: const Text('Choose your interests.'),
         ),
-        backgroundColor: Colors.white,
+        backgroundColor: isDarkMode(context) ? null : Colors.white,
       ),
       body: Scrollbar(
         controller: _scrollController,
@@ -131,7 +131,7 @@ class _InterestsScreenState extends State<InterestsScreen> {
                     fontSize: Sizes.size20,
                   ),
                 ),
-                Gaps.v64,
+                Gaps.v32,
                 Wrap(
                   runSpacing: 15,
                   spacing: 15,
@@ -144,37 +144,37 @@ class _InterestsScreenState extends State<InterestsScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: isDarkMode(context) ? Colors.black : Colors.white,
-        elevation: 2,
-        height: 140,
-        child: Padding(
-          padding: const EdgeInsets.only(
-            bottom: Sizes.size40,
-            top: Sizes.size16,
-            left: Sizes.size24,
-            right: Sizes.size24,
-          ),
-          // child: Container(
-          //   padding: const EdgeInsets.symmetric(
-          //     vertical: Sizes.size20,
-          //   ),
-          //   decoration: BoxDecoration(
-          //     color: Theme.of(context).primaryColor,
-          //   ),
-          //   child: const Text(
-          //     'Next',
-          //     textAlign: TextAlign.center,
-          //     style: TextStyle(
-          //       color: Colors.white,
-          //       fontSize: Sizes.size16,
-          //     ),
-          //   ),
-          // ),
-          child: CupertinoButton(
-            color: Theme.of(context).primaryColor,
-            onPressed: _onNextTap,
-            child: const Text('Next'),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.only(
+          bottom: Sizes.size40,
+          top: Sizes.size16,
+          left: Sizes.size24,
+          right: Sizes.size24,
+        ),
+        // child: Container(
+        //   padding: const EdgeInsets.symmetric(
+        //     vertical: Sizes.size20,
+        //   ),
+        //   decoration: BoxDecoration(
+        //     color: Theme.of(context).primaryColor,
+        //   ),
+        //   child: const Text(
+        //     'Next',
+        //     textAlign: TextAlign.center,
+        //     style: TextStyle(
+        //       color: Colors.white,
+        //       fontSize: Sizes.size16,
+        //     ),
+        //   ),
+        // ),
+        child: CupertinoButton(
+          color: Theme.of(context).primaryColor,
+          onPressed: _onNextTap,
+          child: const Text(
+            'Next',
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
         ),
       ),

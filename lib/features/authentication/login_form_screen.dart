@@ -35,7 +35,9 @@ class LoginFormScreen extends StatelessWidget {
         title: const Text('Log in'),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: Sizes.size36),
+        padding: const EdgeInsets.all(
+          Sizes.size36,
+        ),
         child: Form(
           key: _formKey,
           child: Column(
