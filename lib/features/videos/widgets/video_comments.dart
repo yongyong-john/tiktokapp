@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktokapp/constants/gaps.dart';
 import 'package:tiktokapp/constants/sizes.dart';
+import 'package:tiktokapp/generated/l10n.dart';
 import 'package:tiktokapp/utils.dart';
 
 class VideoComments extends StatefulWidget {
@@ -50,7 +51,9 @@ class _VideoCommentsState extends State<VideoComments> {
         backgroundColor: isDark ? null : Colors.grey.shade50,
         appBar: AppBar(
           backgroundColor: isDark ? null : Colors.grey.shade50,
-          title: const Text("22796 comments"),
+          title: Text(
+            S.of(context).commentTitle(23457546, 23457546),
+          ),
           automaticallyImplyLeading: false,
           actions: [
             IconButton(

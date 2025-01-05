@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tiktokapp/constants/sizes.dart';
 import 'package:tiktokapp/features/authentication/sign_up_screen.dart';
+import 'package:tiktokapp/features/main_navigation/main_navigation_screen.dart';
+// i18n for Flutter
+// https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization#messages-with-numbers-and-currencies
+import 'package:tiktokapp/generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,9 +31,23 @@ class TikTokApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    S.load(const Locale("ko"));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'TikTok App',
+      // NOTE: AppLocalizations.localizationsDelegates에 아래의 delegate가 모두 포함됨
+      // intl 폴더 설정 후, 'flutter gen-l10n' 명령어를 실행
+      // localizationsDelegates: AppLocalizations.localizationsDelegates,
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en'),
+        Locale('ko'),
+      ],
       themeMode: ThemeMode.system,
       // NOTE: Theme을 설정하기 쉽게 "flex_color_scheme" package를 사용할 수 있음
       theme: ThemeData(
