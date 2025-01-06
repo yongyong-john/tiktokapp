@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:tiktokapp/constants/sizes.dart';
+import 'package:tiktokapp/features/authentication/email_screen.dart';
+import 'package:tiktokapp/features/authentication/login_screen.dart';
 import 'package:tiktokapp/features/authentication/sign_up_screen.dart';
-import 'package:tiktokapp/features/main_navigation/main_navigation_screen.dart';
+import 'package:tiktokapp/features/authentication/username_screen.dart';
 // i18n for Flutter
 // https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization#messages-with-numbers-and-currencies
 import 'package:tiktokapp/generated/l10n.dart';
@@ -121,7 +123,13 @@ class TikTokApp extends StatelessWidget {
         ),
         textTheme: Typography.whiteMountainView,
       ),
-      home: const SignUpScreen(),
+      initialRoute: SignUpScreen.routeName,
+      routes: {
+        SignUpScreen.routeName: (context) => const SignUpScreen(),
+        UsernameScreen.routeName: (context) => const UsernameScreen(),
+        LoginScreen.routeName: (context) => const LoginScreen(),
+        EmailScreen.routeName: (context) => const EmailScreen()
+      },
     );
   }
 }

@@ -9,22 +9,31 @@ import 'package:tiktokapp/generated/l10n.dart';
 import 'package:tiktokapp/utils.dart';
 
 class SignUpScreen extends StatelessWidget {
+  static const routeName = "/";
   const SignUpScreen({super.key});
 
-  void _onLoginTap(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const LoginScreen(),
-      ),
-    );
+  void _onLoginTap(BuildContext context) async {
+    final result = await Navigator.of(context).pushNamed(LoginScreen.routeName);
+    print("User come back! $result");
   }
 
   void _onUsernameTap(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => const UsernameScreen(),
-      ),
-    );
+    // NOTE: Navigator에서 Animation 효과를 주거나 제거하는 방법 (old version)
+    // Navigator.of(context).push(
+    //   PageRouteBuilder(
+    //     transitionDuration: const Duration(seconds: 2),
+    //     reverseTransitionDuration: const Duration(seconds: 2),
+    //     transitionsBuilder: (context, animation, secondaryAnimation, child) => ScaleTransition(
+    //       scale: animation,
+    //       child: FadeTransition(
+    //         opacity: animation,
+    //         child: child,
+    //       ),
+    //     ),
+    //     pageBuilder: (context, animation, secondaryAnimation) => const UsernameScreen(),
+    //   ),
+    // );
+    Navigator.of(context).pushNamed(UsernameScreen.routeName);
   }
 
   @override
