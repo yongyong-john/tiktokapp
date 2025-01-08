@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktokapp/constants/gaps.dart';
 import 'package:tiktokapp/constants/sizes.dart';
 import 'package:tiktokapp/features/authentication/login_screen.dart';
@@ -9,31 +10,19 @@ import 'package:tiktokapp/generated/l10n.dart';
 import 'package:tiktokapp/utils.dart';
 
 class SignUpScreen extends StatelessWidget {
-  static const routeName = "/";
+  static const routeURL = "/";
+  static const routeName = 'signUp';
   const SignUpScreen({super.key});
 
   void _onLoginTap(BuildContext context) async {
-    final result = await Navigator.of(context).pushNamed(LoginScreen.routeName);
-    print("User come back! $result");
+    // NOTE: push & go, push는 navigator stack에 쌓아 pop이 가능하지만,
+    // go는 navigator stack에 쌓이지 않아 pop할 수 없으며 <(뒤로가기) 버튼도 사라짐
+    context.push(LoginScreen.routeName);
   }
 
   void _onUsernameTap(BuildContext context) {
-    // NOTE: Navigator에서 Animation 효과를 주거나 제거하는 방법 (old version)
-    // Navigator.of(context).push(
-    //   PageRouteBuilder(
-    //     transitionDuration: const Duration(seconds: 2),
-    //     reverseTransitionDuration: const Duration(seconds: 2),
-    //     transitionsBuilder: (context, animation, secondaryAnimation, child) => ScaleTransition(
-    //       scale: animation,
-    //       child: FadeTransition(
-    //         opacity: animation,
-    //         child: child,
-    //       ),
-    //     ),
-    //     pageBuilder: (context, animation, secondaryAnimation) => const UsernameScreen(),
-    //   ),
-    // );
-    Navigator.of(context).pushNamed(UsernameScreen.routeName);
+    // context.push(UsernameScreen.routeURL);
+    context.pushNamed(UsernameScreen.routeName);
   }
 
   @override
