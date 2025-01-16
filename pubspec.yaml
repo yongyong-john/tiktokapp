@@ -42,10 +42,13 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   font_awesome_flutter: ^10.3.0
-  video_player: ^2.4.10
+  video_player: ^2.9.2
   visibility_detector: ^0.3.3
-  google_fonts: ^6.2.1
   go_router: ^6.0.2
+  camera: ^0.10.6
+  permission_handler: ^10.2.0
+  image_gallery_saver: ^2.0.3
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
