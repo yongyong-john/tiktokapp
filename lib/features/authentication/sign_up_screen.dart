@@ -17,12 +17,17 @@ class SignUpScreen extends StatelessWidget {
   void _onLoginTap(BuildContext context) async {
     // NOTE: push & go, push는 navigator stack에 쌓아 pop이 가능하지만,
     // go는 navigator stack에 쌓이지 않아 pop할 수 없으며 <(뒤로가기) 버튼도 사라짐
-    context.push(LoginScreen.routeName);
+    context.pushNamed(LoginScreen.routeName);
   }
 
   void _onUsernameTap(BuildContext context) {
-    // context.push(UsernameScreen.routeURL);
-    context.pushNamed(UsernameScreen.routeName);
+    // NOTE: Sign up을 진행하는 동안 url로 페이지 이동이 되지 않게 하도록 Navigator.push를 사용
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const UsernameScreen(),
+      ),
+    );
   }
 
   @override

@@ -1,23 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tiktokapp/constants/gaps.dart';
 import 'package:tiktokapp/features/discover/discover_screen.dart';
 import 'package:tiktokapp/features/inbox/inbox_screen.dart';
-import 'package:tiktokapp/features/main_navigation/widgets/nav_tab.dart';
-import 'package:tiktokapp/features/main_navigation/widgets/post_video_button.dart';
+import 'package:tiktokapp/common/widgets/main_navigation/widgets/nav_tab.dart';
+import 'package:tiktokapp/common/widgets/main_navigation/widgets/post_video_button.dart';
 import 'package:tiktokapp/features/users/user_profile_screen.dart';
+import 'package:tiktokapp/features/videos/video_recoding_screen.dart';
 import 'package:tiktokapp/features/videos/video_timeline_screen.dart';
 import 'package:tiktokapp/utils.dart';
 
 class MainNavigationScreen extends StatefulWidget {
-  const MainNavigationScreen({super.key});
+  static const String routeName = "main_navigation";
+  final String tab;
+  const MainNavigationScreen({
+    super.key,
+    required this.tab,
+  });
 
   @override
   State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
-  int _selectedIndex = 1;
+  final List<String> _tabs = [
+    'home',
+    'discover',
+    'etc',
+    'inbox',
+    'profile',
+  ];
+  late int _selectedIndex = _tabs.indexOf(widget.tab);
 
   final screens = [
     const Center(
@@ -53,22 +67,24 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   ];
 
   void _onTap(int index) {
+    context.go("/${_tabs[index]}");
     setState(() {
       _selectedIndex = index;
     });
   }
 
   void _onPostVideoButtonTap() {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(
-            title: const Text('Record video'),
-          ),
-        ),
-        fullscreenDialog: true,
-      ),
-    );
+    context.pushNamed(VideoRecodingScreen.routeName);
+    // Navigator.of(context).push(
+    //   MaterialPageRoute(
+    //     builder: (context) => Scaffold(
+    //       appBar: AppBar(
+    //         title: const Text('Record video'),
+    //       ),
+    //     ),
+    //     fullscreenDialog: true,
+    //   ),
+    // );
   }
 
   @override
