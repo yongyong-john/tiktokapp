@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tiktokapp/common/widgets/video_config/video_config.dart';
 import 'package:tiktokapp/constants/gaps.dart';
 import 'package:tiktokapp/constants/sizes.dart';
 import 'package:tiktokapp/features/videos/widgets/video_button.dart';
@@ -115,6 +116,9 @@ class _VideoPostState extends State<VideoPost> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
+    // NOTE: 이와 같이 VideoCofig의 직접적인 사용은 옳지 못 함
+    // final videoCOnfig = context.dependOnInheritedWidgetOfExactType<VideoConfig>();
+    // VideoConfig에서 construct function인 of를 만들어 호출하여 사용
     return VisibilityDetector(
       key: Key("${widget.index}"),
       onVisibilityChanged: _onVisibilityChange,
@@ -153,6 +157,19 @@ class _VideoPostState extends State<VideoPost> with SingleTickerProviderStateMix
                     ),
                   ),
                 ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 30,
+            left: 10,
+            child: IconButton(
+              onPressed: () {
+                VideoConfigData.of(context).toggleMuted();
+              },
+              icon: FaIcon(
+                VideoConfigData.of(context).autoMute ? FontAwesomeIcons.volumeOff : FontAwesomeIcons.volumeHigh,
+                color: Colors.white,
               ),
             ),
           ),
