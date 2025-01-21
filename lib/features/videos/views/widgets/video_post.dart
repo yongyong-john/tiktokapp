@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tiktokapp/common/widgets/video_config/video_config.dart';
+import 'package:provider/provider.dart';
 import 'package:tiktokapp/constants/gaps.dart';
 import 'package:tiktokapp/constants/sizes.dart';
-import 'package:tiktokapp/features/videos/widgets/video_button.dart';
-import 'package:tiktokapp/features/videos/widgets/video_comments.dart';
+import 'package:tiktokapp/features/videos/view_models/playback_config_vm.dart';
+import 'package:tiktokapp/features/videos/views/widgets/video_button.dart';
+import 'package:tiktokapp/features/videos/views/widgets/video_comments.dart';
 import 'package:tiktokapp/generated/l10n.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -61,6 +62,15 @@ class _VideoPostState extends State<VideoPost> with SingleTickerProviderStateMix
       value: 1.5,
       duration: _duration,
     );
+
+    context.read<PlaybackConfigViewModel>().addListener(_onPlaybackConfigChange);
+
+    // NOTE: Settings_screen의 AnimatedBuilder 대신 addListener를 사용
+    // videoConfig.addListener(
+    //   () {
+    //     setState(() {});
+    //   },
+    // );
   }
 
   @override
@@ -70,11 +80,24 @@ class _VideoPostState extends State<VideoPost> with SingleTickerProviderStateMix
     super.dispose();
   }
 
+  void _onPlaybackConfigChange() {
+    if (!mounted) return;
+    final muted = context.read<PlaybackConfigViewModel>().muted;
+    if (muted) {
+      _videoPlayerController.setVolume(0);
+    } else {
+      _videoPlayerController.setVolume(1);
+    }
+  }
+
   void _onVisibilityChange(VisibilityInfo info) {
     // NOTE: Widget이 tree에 있다면 mount는 true를 return.
     if (!mounted) return;
     if (info.visibleFraction == 1 && !_isPaused && !_videoPlayerController.value.isPlaying) {
-      _videoPlayerController.play();
+      final autoPlay = context.read<PlaybackConfigViewModel>().autoPlay;
+      if (autoPlay) {
+        _videoPlayerController.play();
+      }
     }
     if (_videoPlayerController.value.isPlaying && info.visibleFraction == 0) {
       // NOTE: Bottom navigation 화면 이동 후 돌아왔을 때, 영상을 다시 재생하기 위해 2번 토글.
@@ -165,10 +188,14 @@ class _VideoPostState extends State<VideoPost> with SingleTickerProviderStateMix
             left: 10,
             child: IconButton(
               onPressed: () {
-                VideoConfigData.of(context).toggleMuted();
+                context.read<PlaybackConfigViewModel>().setMuted(
+                      !context.read<PlaybackConfigViewModel>().muted,
+                    );
               },
               icon: FaIcon(
-                VideoConfigData.of(context).autoMute ? FontAwesomeIcons.volumeOff : FontAwesomeIcons.volumeHigh,
+                context.watch<PlaybackConfigViewModel>().muted
+                    ? FontAwesomeIcons.volumeOff
+                    : FontAwesomeIcons.volumeHigh,
                 color: Colors.white,
               ),
             ),

@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tiktokapp/common/widgets/video_config/video_config.dart';
+import 'package:provider/provider.dart';
+import 'package:tiktokapp/features/videos/view_models/playback_config_vm.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -31,15 +32,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         body: ListView(
           children: [
-            // NOTE: adaptive는 디바이스 OS에 따라 맞는 UI를 보여줌 Material or Cupertino
+            // NOTE: AnimatedBuilder를 사용하면 해당 widget에 해당하는 부분만 새로고침 됨
+            // AnimatedBuilder(
+            //   animation: videoConfig,
+            //   builder: (context, child) => SwitchListTile.adaptive(
+            //     // value: videoConfig.autoMute,
+            //     value: videoConfig.value,
+            //     onChanged: (value) {
+            //       // videoConfig.toggleAutoMute();
+            //       videoConfig.value = !videoConfig.value;
+            //     },
+            //     title: const Text('Auto Mute'),
+            //     subtitle: const Text('Videos will be muted by default.'),
+            //   ),
+            // ),
             SwitchListTile.adaptive(
-              value: VideoConfigData.of(context).autoMute,
-              onChanged: (value) {
-                VideoConfigData.of(context).toggleMuted();
-              },
+              value: context.watch<PlaybackConfigViewModel>().muted,
+              onChanged: (value) => context.read<PlaybackConfigViewModel>().setMuted(value),
               title: const Text('Auto Mute'),
               subtitle: const Text('Videos will be muted by default.'),
             ),
+            SwitchListTile.adaptive(
+              value: context.watch<PlaybackConfigViewModel>().autoPlay,
+              onChanged: (value) => context.read<PlaybackConfigViewModel>().setAutoPlay(value),
+              title: const Text('Auto Play'),
+              subtitle: const Text('Videos will be played by default.'),
+            ),
+            // NOTE: adaptive는 디바이스 OS에 따라 맞는 UI를 보여줌 Material or Cupertino
             SwitchListTile.adaptive(
               value: _notification,
               onChanged: _onNotificationChanged,
