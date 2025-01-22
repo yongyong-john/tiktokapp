@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -6,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tiktokapp/constants/sizes.dart';
 import 'package:tiktokapp/features/videos/repos/playback_config_repo.dart';
 import 'package:tiktokapp/features/videos/view_models/playback_config_view_model.dart';
+import 'package:tiktokapp/firebase_options.dart';
 import 'package:tiktokapp/router.dart';
 // i18n for Flutter
 // https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization#messages-with-numbers-and-currencies
@@ -13,6 +15,11 @@ import 'package:tiktokapp/generated/l10n.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // NOTE: Firebase app initialization
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   // NOTE: Statusbar의 orientation 설정
   await SystemChrome.setPreferredOrientations(
@@ -41,15 +48,15 @@ void main() async {
   );
 }
 
-class TikTokApp extends StatelessWidget {
+class TikTokApp extends ConsumerWidget {
   const TikTokApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // S.load(const Locale("en"));
 
     return MaterialApp.router(
-      routerConfig: router,
+      routerConfig: ref.watch(routerProvider),
       debugShowCheckedModeBanner: false,
       title: 'TikTok App',
       // NOTE: AppLocalizations.localizationsDelegates에 아래의 delegate가 모두 포함됨
