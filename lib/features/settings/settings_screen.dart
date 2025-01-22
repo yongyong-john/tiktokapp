@@ -1,28 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tiktokapp/features/videos/view_models/playback_config_vm.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tiktokapp/features/videos/view_models/playback_config_view_model.dart';
 
-class SettingsScreen extends StatefulWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
-  State<SettingsScreen> createState() => _SettingsScreenState();
-}
-
-class _SettingsScreenState extends State<SettingsScreen> {
-  bool _notification = false;
-
-  void _onNotificationChanged(bool? newValue) {
-    if (newValue == null) return;
-    setState(() {
-      _notification = newValue;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Localizations.override(
       context: context,
       locale: const Locale("ko"),
@@ -32,46 +18,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         body: ListView(
           children: [
-            // NOTE: AnimatedBuilder를 사용하면 해당 widget에 해당하는 부분만 새로고침 됨
-            // AnimatedBuilder(
-            //   animation: videoConfig,
-            //   builder: (context, child) => SwitchListTile.adaptive(
-            //     // value: videoConfig.autoMute,
-            //     value: videoConfig.value,
-            //     onChanged: (value) {
-            //       // videoConfig.toggleAutoMute();
-            //       videoConfig.value = !videoConfig.value;
-            //     },
-            //     title: const Text('Auto Mute'),
-            //     subtitle: const Text('Videos will be muted by default.'),
-            //   ),
-            // ),
             SwitchListTile.adaptive(
-              value: context.watch<PlaybackConfigViewModel>().muted,
-              onChanged: (value) => context.read<PlaybackConfigViewModel>().setMuted(value),
+              value: ref.watch(playbackConfigProvider).muted,
+              onChanged: (value) => ref.read(playbackConfigProvider.notifier).setMuted(value),
               title: const Text('Auto Mute'),
               subtitle: const Text('Videos will be muted by default.'),
             ),
             SwitchListTile.adaptive(
-              value: context.watch<PlaybackConfigViewModel>().autoPlay,
-              onChanged: (value) => context.read<PlaybackConfigViewModel>().setAutoPlay(value),
+              value: ref.watch(playbackConfigProvider).autoPlay,
+              onChanged: (value) => ref.read(playbackConfigProvider.notifier).setAutoPlay(value),
               title: const Text('Auto Play'),
               subtitle: const Text('Videos will be played by default.'),
             ),
             // NOTE: adaptive는 디바이스 OS에 따라 맞는 UI를 보여줌 Material or Cupertino
             SwitchListTile.adaptive(
-              value: _notification,
-              onChanged: _onNotificationChanged,
+              value: false,
+              onChanged: (value) {},
               title: const Text('Enable notification'),
             ),
             CheckboxListTile.adaptive(
-              value: _notification,
-              onChanged: _onNotificationChanged,
+              value: false,
+              onChanged: (value) {},
               title: const Text('Enable notification'),
             ),
             ListTile(
               onTap: () async {
-                if (!mounted) return;
                 final date = await showDatePicker(
                   context: context,
                   initialDate: DateTime.now(),
@@ -81,7 +52,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 if (kDebugMode) {
                   print(date);
                 }
-                if (!mounted) return;
                 final time = await showTimePicker(
                   context: context,
                   initialTime: TimeOfDay.now(),
@@ -89,7 +59,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 if (kDebugMode) {
                   print(time);
                 }
-                if (!mounted) return;
                 final booking = await showDateRangePicker(
                   context: context,
                   firstDate: DateTime(1990),
