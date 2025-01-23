@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tiktokapp/constants/gaps.dart';
 import 'package:tiktokapp/constants/sizes.dart';
 import 'package:tiktokapp/features/authentication/login_screen.dart';
 import 'package:tiktokapp/features/authentication/username_screen.dart';
+import 'package:tiktokapp/features/authentication/view_models/social_auth_view_model.dart';
 import 'package:tiktokapp/features/authentication/widgets/auth_button.dart';
 import 'package:tiktokapp/generated/l10n.dart';
 import 'package:tiktokapp/utils.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends ConsumerWidget {
   static const routeURL = "/";
   static const routeName = 'signUp';
   const SignUpScreen({super.key});
@@ -31,7 +33,7 @@ class SignUpScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     // NOTE: Device에 설정된 locale을 확인하는 방법
     // print(Localizations.localeOf(context));
     return OrientationBuilder(
@@ -77,9 +79,12 @@ class SignUpScreen extends StatelessWidget {
                       ),
                     ),
                     Gaps.v16,
-                    AuthButton(
-                      icon: const FaIcon(FontAwesomeIcons.apple),
-                      text: S.of(context).AppleLoginButton,
+                    GestureDetector(
+                      onTap: () => ref.read(socialAuthProvider.notifier).githubSignIn(context),
+                      child: const AuthButton(
+                        icon: FaIcon(FontAwesomeIcons.github),
+                        text: 'Continue with GitHub',
+                      ),
                     ),
                   ],
                   if (orientation == Orientation.landscape)

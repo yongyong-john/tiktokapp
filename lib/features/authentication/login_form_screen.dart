@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tiktokapp/constants/gaps.dart';
 import 'package:tiktokapp/constants/sizes.dart';
+import 'package:tiktokapp/features/authentication/view_models/login_view_model.dart';
 import 'package:tiktokapp/features/authentication/widgets/form_button.dart';
-import 'package:tiktokapp/features/onboarding/interests_screen.dart';
 
-class LoginFormScreen extends StatelessWidget {
+class LoginFormScreen extends ConsumerStatefulWidget {
+  const LoginFormScreen({super.key});
+
+  @override
+  ConsumerState<LoginFormScreen> createState() => LoginFormScreenState();
+}
+
+class LoginFormScreenState extends ConsumerState<LoginFormScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  LoginFormScreen({super.key});
-
-  final Map<String, String> _formMap = <String, String>{};
+  final Map<String, String> _formData = <String, String>{};
 
   void _onSubmitTap(BuildContext context) {
     if (_formKey.currentState != null) {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        context.goNamed(InterestsScreen.routeName);
+        ref.read(loginProvider.notifier).login(
+              _formData["email"]!,
+              _formData["password"]!,
+              context,
+            );
       }
     }
   }
@@ -45,13 +54,14 @@ class LoginFormScreen extends StatelessWidget {
                 },
                 onSaved: (newValue) {
                   if (newValue != null) {
-                    _formMap['email'] = newValue;
+                    _formData['email'] = newValue;
                   }
                 },
               ),
               Gaps.v16,
               TextFormField(
                 decoration: const InputDecoration(hintText: 'Password'),
+                obscureText: true,
                 validator: (value) {
                   if (value != null && value.isEmpty) {
                     return "Please write your password.";
@@ -60,14 +70,16 @@ class LoginFormScreen extends StatelessWidget {
                 },
                 onSaved: (newValue) {
                   if (newValue != null) {
-                    _formMap['password'] = newValue;
+                    _formData['password'] = newValue;
                   }
                 },
               ),
               Gaps.v28,
               GestureDetector(
                 onTap: () => _onSubmitTap(context),
-                child: const FormButton(disabled: false),
+                child: FormButton(
+                  disabled: ref.read(loginProvider).isLoading,
+                ),
               ),
             ],
           ),
