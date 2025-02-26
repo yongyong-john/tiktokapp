@@ -5,7 +5,7 @@ admin.initializeApp();
 
 // NOTE: Firebase functions에 대한 추가/수정을 진행하고나면 firebase deploy --only functions 명령어로 deploy가 필요
 export const onVideoCreated = functions.firestore
-  .document("videos/{videoID}")
+  .document("videos/{videoId}")
   .onCreate(async (snapshot, context) => {
     const spawn = require("child-process-promise").spawn;
     const video = snapshot.data();
@@ -19,11 +19,11 @@ export const onVideoCreated = functions.firestore
       "1", // 프레임 추출
       "-vf",
       "scale=150:-1", // 썸네일 너비 150으로 축소 (높이는 비율에 맞게 자동 전환)
-      "/tmp/${snapshot.id}.jpg", // 결과물을 tmp 폴더로 이동
+      `/tmp/${snapshot.id}.jpg`, // 결과물을 tmp 폴더로 이동
     ]);
     const storage = admin.storage();
-    const [file, _] = await storage.bucket().upload("/tmp/${snapshot.id}.jpg", {
-      destination: "thumbnails/${snapshot.id}.jpg",
+    const [file, _] = await storage.bucket().upload(`/tmp/${snapshot.id}.jpg`, {
+      destination: `thumbnails/${snapshot.id}.jpg`,
     });
     await file.makePublic();
     await snapshot.ref.update({ thumbnailUrl: file.publicUrl() });
@@ -38,4 +38,26 @@ export const onVideoCreated = functions.firestore
         thumbnailUrl: file.publicUrl(),
         videoId: snapshot.id,
       });
+  });
+
+export const onLikedCreated = functions.firestore
+  .document("likes/{likeId}")
+  .onCreate(async (snapshot, context) => {
+    const db = admin.firestore();
+    const [videoId, _] = snapshot.id.split("000");
+    await db
+      .collection("videos")
+      .doc(videoId)
+      .update({ likes: admin.firestore.FieldValue.increment(1) });
+  });
+
+export const onLikedRemoved = functions.firestore
+  .document("likes/{likeId}")
+  .onDelete(async (snapshot, context) => {
+    const db = admin.firestore();
+    const [videoId, _] = snapshot.id.split("000");
+    await db
+      .collection("videos")
+      .doc(videoId)
+      .update({ likes: admin.firestore.FieldValue.increment(-1) });
   });

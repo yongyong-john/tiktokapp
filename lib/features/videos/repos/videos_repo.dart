@@ -19,6 +19,34 @@ class VideosRepository {
   Future<void> saveVideo(VideoModel data) async {
     await _db.collection('videos').add(data.toJson());
   }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> fetchVideos({int? lastItemCreatesAt}) {
+    // return _db.collection('videos').where('likes', isGreaterThan: 10).get();
+    final query = _db
+        .collection('videos')
+        .orderBy(
+          'createdAt',
+          descending: true,
+        )
+        .limit(2);
+    if (lastItemCreatesAt == null) {
+      return query.get();
+    } else {
+      return query.startAfter([lastItemCreatesAt]).get();
+    }
+  }
+
+  Future<void> toggleLikeVideo(String videoId, String userId) async {
+    final query = _db.collection("likes").doc("${videoId}000$userId");
+    final like = await query.get();
+    if (!like.exists) {
+      await query.set(
+        {"createdAt": DateTime.now().millisecondsSinceEpoch},
+      );
+    } else {
+      await query.delete();
+    }
+  }
 }
 
 final videosRepo = Provider(

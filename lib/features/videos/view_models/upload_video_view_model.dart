@@ -30,6 +30,7 @@ class UploadVideoViewModel extends AsyncNotifier<void> {
           if (task.metadata != null) {
             await _repository.saveVideo(
               VideoModel(
+                id: "",
                 title: "title",
                 description: "description",
                 fileUrl: await task.ref.getDownloadURL(),
@@ -37,7 +38,7 @@ class UploadVideoViewModel extends AsyncNotifier<void> {
                 creatorUid: user.uid,
                 likes: 0,
                 creator: userProfile.name,
-                createAt: DateTime.now().millisecondsSinceEpoch,
+                createdAt: DateTime.now().millisecondsSinceEpoch,
                 comments: 0,
               ),
             );

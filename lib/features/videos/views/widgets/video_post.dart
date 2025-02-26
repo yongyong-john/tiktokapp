@@ -4,7 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tiktokapp/constants/gaps.dart';
 import 'package:tiktokapp/constants/sizes.dart';
+import 'package:tiktokapp/features/videos/models/video_model.dart';
 import 'package:tiktokapp/features/videos/view_models/playback_config_view_model.dart';
+import 'package:tiktokapp/features/videos/view_models/video_post_view_model.dart';
 import 'package:tiktokapp/features/videos/views/widgets/video_button.dart';
 import 'package:tiktokapp/features/videos/views/widgets/video_comments.dart';
 import 'package:tiktokapp/generated/l10n.dart';
@@ -14,10 +16,12 @@ import 'package:visibility_detector/visibility_detector.dart';
 class VideoPost extends ConsumerStatefulWidget {
   final Function onVideoFinished;
   final int index;
+  final VideoModel videoData;
   const VideoPost({
     super.key,
     required this.onVideoFinished,
     required this.index,
+    required this.videoData,
   });
 
   @override
@@ -25,7 +29,8 @@ class VideoPost extends ConsumerStatefulWidget {
 }
 
 class VideoPostState extends ConsumerState<VideoPost> with SingleTickerProviderStateMixin {
-  final VideoPlayerController _videoPlayerController = VideoPlayerController.asset("assets/videos/video1.mp4");
+  late final VideoPlayerController _videoPlayerController =
+      VideoPlayerController.networkUrl(Uri.parse(widget.videoData.fileUrl));
   late final AnimationController _animationController;
 
   final Duration _duration = const Duration(milliseconds: 200);
@@ -126,6 +131,10 @@ class VideoPostState extends ConsumerState<VideoPost> with SingleTickerProviderS
     }
   }
 
+  void _onLikeTap() {
+    ref.read(videoPostProvider(widget.videoData.id).notifier).likeVide();
+  }
+
   @override
   Widget build(BuildContext context) {
     // NOTE: 이와 같이 VideoCofig의 직접적인 사용은 옳지 못 함
@@ -139,8 +148,9 @@ class VideoPostState extends ConsumerState<VideoPost> with SingleTickerProviderS
           Positioned.fill(
             child: _videoPlayerController.value.isInitialized
                 ? VideoPlayer(_videoPlayerController)
-                : Container(
-                    color: Colors.black,
+                : Image.network(
+                    widget.videoData.thumbnailUrl,
+                    fit: BoxFit.cover,
                   ),
           ),
           Positioned.fill(
@@ -183,15 +193,15 @@ class VideoPostState extends ConsumerState<VideoPost> with SingleTickerProviderS
               ),
             ),
           ),
-          const Positioned(
+          Positioned(
             bottom: 20,
             left: 10,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "@ID",
-                  style: TextStyle(
+                  "@${widget.videoData.creator}",
+                  style: const TextStyle(
                     fontSize: Sizes.size20,
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -199,8 +209,8 @@ class VideoPostState extends ConsumerState<VideoPost> with SingleTickerProviderS
                 ),
                 Gaps.v12,
                 Text(
-                  "This is so cute kitty video.",
-                  style: TextStyle(
+                  widget.videoData.description,
+                  style: const TextStyle(
                     fontSize: Sizes.size16,
                     color: Colors.white,
                   ),
@@ -213,22 +223,26 @@ class VideoPostState extends ConsumerState<VideoPost> with SingleTickerProviderS
             right: 10,
             child: Column(
               children: [
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 25,
-                  foregroundImage: NetworkImage("https://avatars.githubusercontent.com/u/3612017"),
-                  child: Text("Profile"),
+                  foregroundImage: NetworkImage(
+                      "https://firebasestorage.googleapis.com/v0/b/tictoc-clone-haku.firebasestorage.app/o/avatars%2F${widget.videoData.creatorUid}?alt=media"),
+                  child: Text(widget.videoData.creator),
                 ),
                 Gaps.v24,
-                VideoButton(
-                  icon: FontAwesomeIcons.solidHeart,
-                  text: S.of(context).likeCount(232321432),
+                GestureDetector(
+                  onTap: _onLikeTap,
+                  child: VideoButton(
+                    icon: FontAwesomeIcons.solidHeart,
+                    text: S.of(context).likeCount(widget.videoData.likes),
+                  ),
                 ),
                 Gaps.v24,
                 GestureDetector(
                   onTap: () => _onCommentsTap(context),
                   child: VideoButton(
                     icon: FontAwesomeIcons.solidComment,
-                    text: S.of(context).commentCount(4423),
+                    text: S.of(context).commentCount(widget.videoData.comments),
                   ),
                 ),
                 Gaps.v24,
