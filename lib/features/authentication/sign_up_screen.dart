@@ -47,10 +47,11 @@ class SignUpScreen extends ConsumerWidget {
                 children: [
                   Gaps.v80,
                   Text(
-                    S.of(context).signUpTitle(
-                          "TikTok",
-                          DateTime.now(),
-                        ),
+                    // S.of(context).signUpTitle(
+                    //       "TikTok",
+                    //       DateTime.now(),
+                    //     ),
+                    "Sign up for Tiktok",
                     // NOTE: Theme을 사용 중 특별한 하나만 수정하고 싶으면 copywith로 일부만 수정 가능.
                     style: Theme.of(context).textTheme.headlineSmall!, //.copyWith(color: Colors.red),
                   ),
@@ -73,9 +74,10 @@ class SignUpScreen extends ConsumerWidget {
                   if (orientation == Orientation.portrait) ...[
                     GestureDetector(
                       onTap: () => _onUsernameTap(context),
-                      child: AuthButton(
-                        icon: const FaIcon(FontAwesomeIcons.user),
-                        text: S.of(context).emailPasswordButton,
+                      child: const AuthButton(
+                        icon: FaIcon(FontAwesomeIcons.user),
+                        // text: S.of(context).emailPasswordButton,
+                        text: 'Use email & password',
                       ),
                     ),
                     Gaps.v16,
@@ -128,7 +130,8 @@ class SignUpScreen extends ConsumerWidget {
                   GestureDetector(
                     onTap: () => _onLoginTap(context),
                     child: Text(
-                      S.of(context).logIn("female"),
+                      // S.of(context).logIn("female"),
+                      "Log in",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: Theme.of(context).primaryColor,
